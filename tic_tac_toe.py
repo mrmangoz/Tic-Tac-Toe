@@ -8,8 +8,7 @@ BLUE = 0, 0, 255
 RED = 255, 0, 0
 WHITE = 255, 255, 255
 BLACK = 0, 0, 0
-end = False
-player = "X"
+end = False  # break out of game loop variable
 grid = numpy.zeros((9), dtype=int)  # creates the grid of 0s
 grid = grid.reshape(3, 3)  # reshapes it to a 2d grid
 
@@ -17,7 +16,7 @@ grid = grid.reshape(3, 3)  # reshapes it to a 2d grid
 #  251,251
 
 
-def get_pos(m):
+def get_pos(m):  # this function gets the grid converted coordinates
     if 50 < m < 117:
         g = 0
     elif 117 < m < 184:
@@ -43,9 +42,19 @@ def coords(n):
         return(3)
 
 
+def occupied_check(symbols, pos):
+    if len(symbols.symbols) > 0:
+        for i in range(len(symbols.symbols)):
+            if (pos[0], pos[1]) != symbols.symbols[i].pos:
+                return(True)
+    else:
+        return(True)
+
+
 def draw_symbol(symbol):
     offx = 67*symbol.pos[0]
     offy = 67*symbol.pos[1]
+
     if symbol.type == "X":
         pygame.draw.rect(background, BLUE, [50 + offx, 50 + offy, 67, 67])
         screen.blit(background, (0, 0))
@@ -78,9 +87,10 @@ while not end:
             my = mouse_pos[1]
             if 50 <= mx <= 251 and 50 <= my <= 251:
                 grid_pos = (get_pos(mx), get_pos(my))
-                symbol.add(grid_pos)
-                draw_symbol(symbol)
-                symbols.add(symbol)
-                symbol.switch()
-                print("line check", symbols.line_check(symbol))
-                print(grid_pos)
+                if occupied_check(symbols, grid_pos):
+                    symbol.add(grid_pos)
+                    draw_symbol(symbol)
+                    symbols.add(symbol)
+                    symbol.switch()
+                # print("line check", symbols.line_check(symbol))
+                # print(grid_pos)

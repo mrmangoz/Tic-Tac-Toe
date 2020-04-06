@@ -12,6 +12,5 @@ class Symbols:
                 for symbol in self.symbols:
                     if symbol.pos == (x, y):
                         found += 1
-        #print(found)
         if found == 3:
             return("line found")
